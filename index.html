@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>scroll-snap</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            right: 0;
+            z-index: 1;
+        }
+
+        nav ul {
+            list-style: none;
+        }
+
+        nav ul li {
+            display: inline-block;
+        }
+
+        nav ul li a {
+            color: black;
+            text-decoration: none;
+            padding: 10px;
+        }
+
+        a.active {
+            border-bottom: 1px solid black;
+        }
+
+        .sec {
+            height: 80vh;
+            width: 100%;
+            opacity: 0.3;
+        }
+
+        .sec.red {
+            background-color: red;
+        }
+
+        .sec.blue {
+            background-color: blue;
+        }
+
+        .sec.green {
+            background-color: green;
+        }
+
+        .sec.yellow {
+            background-color: yellow;
+        }
+
+        .margin-top {
+            width: 100%;
+            height: 10vh;
+        }
+
+        .margin-bottom {
+            width: 100%;
+            height: 10vh;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li>
+                <a href="#red" class="active">red</a>
+            </li>
+            <li>
+                <a href="#blue">blue</a>
+            </li>
+            <li>
+                <a href="#green">green</a>
+            </li>
+            <li>
+                <a href="#yellow">yellow</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="margin-top"></div>
+    <section id="red" class="sec red"></section>
+    <section id="blue" class="sec blue"></section>
+    <section id="green" class="sec green"></section>
+    <section id="yellow" class="sec yellow"></section>
+    <div class="margin-bottom"></div>
+
+    <script>
+        const nav_btns = document.querySelectorAll('nav a');
+        var lastScrollTop = 0;
+
+        document.addEventListener("scroll", function () {
+            var st = window.pageYOffset || document.documentElement.scrollTop;
+            var vh = window.innerHeight * 0.8;
+            if (st > lastScrollTop) {
+                for (let i = 0; i < 4; i++) {
+                    if (st > (vh * i) && st < (vh * (i + 1))) {
+                        window.scrollTo({
+                            top: (vh * (i + 1)),
+                            left: 0,
+                            behavior: 'smooth'
+                        });
+                        nav_btns.forEach(btn => btn.classList.remove('active'));
+                        nav_btns[i + 1].classList.add('active');
+                    }
+                }
+            } else {
+                for (let i = 0; i < 4; i++) {
+                    if (st > (vh * (i - 1)) && st < (vh * i)) {
+                        window.scrollTo({
+                            top: (vh * (i - 1)),
+                            left: 0,
+                            behavior: 'smooth'
+                        });
+                        nav_btns.forEach(btn => btn.classList.remove('active'));
+                        nav_btns[i - 1].classList.add('active');
+                    }
+                }
+            }
+            lastScrollTop = st <= 0 ? 0 : st;
+        }, false);
+    </script>
+</body>
+
+</html>
